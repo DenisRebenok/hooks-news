@@ -1,8 +1,10 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { FirebaseContext } from '../../firebase'
+import LinkItem from './LinkItem'
 
 export default function LinkList(props) {
   const { firebase } = useContext(FirebaseContext)
+  const [links, setLinks] = useState([])
 
   useEffect(() => {
     getLinks()
@@ -17,7 +19,18 @@ export default function LinkList(props) {
       return { id: doc.id, ...doc.data() }
     })
 
-    console.log({ links })
+    setLinks(links)
   }
-  return <div>LinkList</div>
+  return (
+    <div>
+      {links.map((link, index) => (
+        <LinkItem
+          key={link.id}
+          showCount={true}
+          link={link}
+          index={index + 1}
+        />
+      ))}
+    </div>
+  )
 }
